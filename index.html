@@ -463,6 +463,74 @@
             transform: scale(1.2);
         }
 
+        /* ========== GALLERY ========== */
+        .gallery {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
+        }
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; margin-top: 2.5rem;
+        }
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: var(--transition);
+        }
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: var(--shadow-hover);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(0.7);
+        }
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.8rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        .gallery-overlay h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.4rem;
+            color: var(--gold);
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+        .gallery-item:hover .gallery-overlay h4 {
+            transform: translateY(0);
+        }
+        .gallery-overlay p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            transform: translateY(20px);
+            transition: var(--transition);
+            transition-delay: 0.1s;
+        }
+        .gallery-item:hover .gallery-overlay p {
+            transform: translateY(0);
+        }
+
         /* ========== RESERVATION ========== */
         .reservation { 
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.06) 0%, transparent 100%);
@@ -521,38 +589,6 @@
         }
         .submit-btn:hover::after { transform: translateX(100%); }
         .submit-btn:active { transform: translateY(-1px); }
-
-        /* ========== GALLERY ========== */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem; margin-top: 2.5rem;
-        }
-        .gallery-item {
-            aspect-ratio: 4/3; border-radius: var(--radius);
-            background: linear-gradient(135deg, #1a1a1a, #222);
-            border: 1px solid var(--border); position: relative;
-            overflow: hidden; cursor: pointer;
-            transition: var(--transition);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem;
-        }
-        .gallery-item:hover {
-            transform: scale(1.03); border-color: var(--gold);
-            box-shadow: var(--shadow-hover);
-        }
-        .gallery-item::after {
-            content: '🖼️'; opacity: 0.7;
-        }
-        .gallery-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.7);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: var(--transition);
-            flex-direction: column; gap: 0.8rem; padding: 1.5rem;
-            text-align: center;
-        }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-overlay h4 { font-family: 'Playfair Display', serif; }
-        .gallery-overlay p { color: var(--text-muted); font-size: 0.95rem; }
 
         /* ========== FOOTER ========== */
         footer { 
@@ -905,7 +941,7 @@
         </div>
     </section>
 
-    <!-- Testimonials Section (NEW) -->
+    <!-- Testimonials Section -->
     <section class="testimonials animate-on-scroll">
         <div class="section-header">
             <span class="section-tag">Guest Experiences</span>
@@ -950,35 +986,53 @@
         </div>
     </section>
 
-    <!-- Gallery Section (NEW) -->
-    <section id="gallery" class="animate-on-scroll">
+    <!-- Gallery Section WITH REAL IMAGES -->
+    <section id="gallery" class="gallery animate-on-scroll">
         <div class="section-header">
             <span class="section-tag">Visual Journey</span>
             <h2 class="section-title">Our Ambiance & Cuisine</h2>
         </div>
         <div class="gallery-grid">
             <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Luxury Restaurant Interior">
+                <div class="gallery-overlay">
+                    <h4>Luxury Dining Room</h4>
+                    <p>Elegant ambiance with modern sophistication</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1631515243349-e06020b5c36b?w=800&q=80" alt="Indian Food Plating">
                 <div class="gallery-overlay">
                     <h4>Signature Plating</h4>
                     <p>Artistry on every plate</p>
                 </div>
             </div>
             <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1559339352-11b06f61244c?w=800&q=80" alt="Dark Elegant Restaurant">
                 <div class="gallery-overlay">
-                    <h4>Luxury Dining</h4>
-                    <p>Elegant private suites</p>
+                    <h4>Intimate Atmosphere</h4>
+                    <p>Dark, moody, and alluring spaces</p>
                 </div>
             </div>
             <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Gourmet Indian Cuisine">
                 <div class="gallery-overlay">
-                    <h4>Live Kitchen</h4>
-                    <p>Chefs in action</p>
+                    <h4>Gourmet Cuisine</h4>
+                    <p>Exquisite flavors, beautiful presentation</p>
                 </div>
             </div>
             <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&q=80" alt="Fine Dining Table Setting">
                 <div class="gallery-overlay">
-                    <h4>Wine Cellar</h4>
-                    <p>Premium selections</p>
+                    <h4>Private Dining</h4>
+                    <p>Exclusive suites for special occasions</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80" alt="Cocktails and Bar">
+                <div class="gallery-overlay">
+                    <h4>Premium Bar</h4>
+                    <p>Curated wines & signature cocktails</p>
                 </div>
             </div>
         </div>
@@ -1209,7 +1263,6 @@
             dot.addEventListener('click', () => {
                 testimonialDots.forEach(d => d.classList.remove('active'));
                 dot.classList.add('active');
-                // In a real implementation, this would change the visible testimonial
             });
         });
 
@@ -1238,12 +1291,10 @@
         });
 
         // ========== INITIALIZE ==========
-        // Set min date for reservation to today
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().slice(0, 16);
             document.getElementById('datetime').min = today;
             
-            // Trigger initial animation for hero content
             setTimeout(() => {
                 document.querySelector('.hero-content').style.animation = 'fadeUp 1s ease forwards';
             }, 300);
