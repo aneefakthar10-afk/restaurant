@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NOOR - Fine Indian dining experience in New Delhi. Award-winning cuisine, luxury ambiance, and unforgettable moments.">
-    <meta property="og:title" content="NOOR | Fine Dining Experience">
-    <meta property="og:description" content="Where Tradition Meets Elegance - Premium Indian Cuisine">
-    <title>NOOR | Fine Dining Experience</title>
+    <meta name="description" content="NOOR - Fine Indian dining experience in New Delhi. Award-winning cuisine, luxury ambiance.">
+    <title>NOOR | Premium Fine Dining</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* ========== CSS VARIABLES & BASE ========== */
+        /* ========== CSS VARIABLES & THEMES ========== */
         :root {
             --bg: #050505;
             --surface: #0f0f0f;
@@ -32,6 +31,19 @@
             --radius-lg: 24px;
         }
 
+        /* Light Mode */
+        .light-mode {
+            --bg: #ffffff;
+            --surface: #f5f5f5;
+            --surface-elevated: #e8e8e8;
+            --text: #111111;
+            --text-muted: #555555;
+            --glass: rgba(0, 0, 0, 0.04);
+            --glass-hover: rgba(0, 0, 0, 0.08);
+            --border: rgba(212, 175, 55, 0.4);
+            --shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -50,6 +62,19 @@
             line-height: 1.7;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ========== PROGRESS BAR ========== */
+        #progressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gold-gradient);
+            width: 0;
+            z-index: 9999;
+            transition: width 0.1s;
         }
 
         /* ========== CUSTOM SCROLLBAR ========== */
@@ -101,6 +126,7 @@
             width: 30px; height: 2px; background: var(--gold);
             transform: translateX(-50%); border-radius: 2px;
         }
+        .nav-wrapper { display: flex; align-items: center; gap: 2rem; }
         .nav-links { display: flex; gap: 2.2rem; list-style: none; }
         .nav-links a { 
             color: var(--text); text-decoration: none; 
@@ -116,6 +142,15 @@
         }
         .nav-links a:hover, .nav-links a.active { color: var(--gold); }
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        
+        .theme-toggle {
+            background: none; border: none; color: var(--text);
+            font-size: 1.3rem; cursor: pointer; padding: 0.5rem;
+            border-radius: 50%; transition: var(--transition-fast);
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+        }
+        .theme-toggle:hover { background: var(--glass); color: var(--gold); }
+        
         .mobile-btn { 
             display: none; background: none; border: none; 
             color: var(--text); font-size: 1.8rem; cursor: pointer;
@@ -131,6 +166,13 @@
                 radial-gradient(ellipse at 20% 15%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
                 radial-gradient(ellipse at 85% 75%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
                 linear-gradient(180deg, var(--bg) 0%, #0a0a0a 60%, #070707 100%);
+        }
+        .hero-video {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            z-index: 0;
         }
         .hero::before {
             content: ''; position: absolute; width: 700px; height: 700px;
@@ -215,7 +257,6 @@
             transform: translateY(-4px);
             box-shadow: 0 10px 30px rgba(242, 242, 242, 0.2);
         }
-        .btn i { font-size: 1.1rem; }
 
         /* ========== SECTIONS ========== */
         section { padding: 6rem 5%; max-width: 1300px; margin: 0 auto; }
@@ -287,12 +328,6 @@
             border-color: var(--gold);
             box-shadow: var(--shadow-hover);
         }
-        .about-card::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.1) 0%, transparent 60%);
-            opacity: 0; transition: var(--transition);
-        }
-        .about-card:hover::before { opacity: 1; }
         .about-card-icon { 
             font-size: 4.5rem; margin-bottom: 1.5rem; 
             display: block; animation: bounce 3s infinite;
@@ -304,9 +339,6 @@
         .about-card h4 { 
             font-family: 'Playfair Display', serif; 
             font-size: 1.6rem; margin-bottom: 0.8rem;
-        }
-        .about-card p { 
-            color: var(--text-muted); font-size: 0.98rem;
         }
 
         /* ========== STATS COUNTER ========== */
@@ -330,6 +362,22 @@
         }
 
         /* ========== MENU SECTION ========== */
+        .menu-search {
+            width: 100%; max-width: 500px;
+            margin: 0 auto 3rem;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        .menu-search:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+        }
         .menu-tabs { 
             display: flex; justify-content: center; gap: 0.8rem; 
             margin-bottom: 3rem; flex-wrap: wrap;
@@ -356,53 +404,56 @@
         .tab-btn:hover::before, .tab-btn.active::before { opacity: 1; }
         
         .menu-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
-            gap: 1.8rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem;
         }
         .menu-item { 
-            background: var(--surface); padding: 2rem; 
-            border-radius: var(--radius); border: 1px solid var(--border); 
-            transition: var(--transition); position: relative; 
-            overflow: hidden; display: flex; flex-direction: column;
+            background: var(--surface); 
+            border-radius: var(--radius); 
+            border: 1px solid var(--border); 
+            transition: var(--transition); 
+            overflow: hidden;
+            position: relative;
         }
         .menu-item:hover { 
-            transform: translateY(-8px); border-color: var(--gold); 
+            transform: translateY(-8px); 
+            border-color: var(--gold); 
             box-shadow: var(--shadow-hover);
-            background: var(--surface-elevated);
         }
-        .menu-item::after { 
-            content: ''; position: absolute; top: 0; left: 0; 
-            width: 100%; height: 4px; 
-            background: var(--gold-gradient); 
-            transform: scaleX(0); transition: transform 0.5s ease;
-            transform-origin: left;
+        .menu-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: var(--transition);
         }
-        .menu-item:hover::after { transform: scaleX(1); }
+        .menu-item:hover img {
+            transform: scale(1.05);
+        }
+        .menu-content {
+            padding: 1.8rem;
+        }
         .item-header { 
             display: flex; justify-content: space-between; 
-            align-items: flex-start; margin-bottom: 1rem; 
+            align-items: flex-start; margin-bottom: 0.8rem; 
             padding-bottom: 0.8rem; border-bottom: 1px dashed var(--border);
         }
         .item-name { 
             font-family: 'Playfair Display', serif; 
-            font-size: 1.5rem; font-weight: 600; 
-            line-height: 1.3;
+            font-size: 1.4rem; font-weight: 600; 
         }
         .item-price { 
             color: var(--gold); font-weight: 700; 
-            font-size: 1.3rem; white-space: nowrap;
-            background: rgba(212, 175, 55, 0.15);
-            padding: 0.3rem 0.9rem; border-radius: 30px;
+            font-size: 1.2rem; white-space: nowrap;
         }
         .item-desc { 
-            color: var(--text-muted); font-size: 1rem; 
-            margin-bottom: 1.2rem; flex-grow: 1;
+            color: var(--text-muted); font-size: 0.95rem; 
+            margin-bottom: 1rem;
         }
         .item-meta { 
-            display: flex; gap: 1.2rem; font-size: 0.85rem; 
+            display: flex; gap: 1rem; font-size: 0.85rem; 
             color: var(--text-muted); flex-wrap: wrap;
         }
-        .item-meta span { display: flex; align-items: center; gap: 0.4rem; }
         .hidden { display: none; }
         .fade-in { animation: fadeInUp 0.6s ease forwards; }
         @keyframes fadeInUp {
@@ -410,10 +461,40 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ========== LIGHTBOX ========== */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 2rem;
+        }
+        #lightbox.active { display: flex; }
+        #lightbox-img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        #lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 3rem;
+            color: var(--gold);
+            cursor: pointer;
+            background: none;
+            border: none;
+            transition: var(--transition-fast);
+        }
+        #lightbox-close:hover { transform: rotate(90deg); color: var(--gold-light); }
+
         /* ========== TESTIMONIALS ========== */
         .testimonials {
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.04) 0%, transparent 100%);
-            position: relative; overflow: hidden;
         }
         .testimonial-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -449,19 +530,6 @@
         }
         .author-info h5 { font-weight: 600; margin-bottom: 0.2rem; }
         .author-info p { color: var(--text-muted); font-size: 0.9rem; }
-        .testimonial-nav {
-            display: flex; justify-content: center; gap: 0.8rem;
-            margin-top: 2.5rem;
-        }
-        .testimonial-dot {
-            width: 12px; height: 12px; border-radius: 50%;
-            background: var(--glass); border: 2px solid var(--border);
-            cursor: pointer; transition: var(--transition-fast);
-        }
-        .testimonial-dot.active {
-            background: var(--gold); border-color: var(--gold);
-            transform: scale(1.2);
-        }
 
         /* ========== GALLERY ========== */
         .gallery {
@@ -506,9 +574,7 @@
             opacity: 0;
             transition: var(--transition);
         }
-        .gallery-item:hover .gallery-overlay {
-            opacity: 1;
-        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
         .gallery-overlay h4 {
             font-family: 'Playfair Display', serif;
             font-size: 1.4rem;
@@ -517,9 +583,7 @@
             transform: translateY(20px);
             transition: var(--transition);
         }
-        .gallery-item:hover .gallery-overlay h4 {
-            transform: translateY(0);
-        }
+        .gallery-item:hover .gallery-overlay h4 { transform: translateY(0); }
         .gallery-overlay p {
             color: var(--text-muted);
             font-size: 0.95rem;
@@ -527,19 +591,12 @@
             transition: var(--transition);
             transition-delay: 0.1s;
         }
-        .gallery-item:hover .gallery-overlay p {
-            transform: translateY(0);
-        }
+        .gallery-item:hover .gallery-overlay p { transform: translateY(0); }
 
         /* ========== RESERVATION ========== */
         .reservation { 
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.06) 0%, transparent 100%);
             position: relative;
-        }
-        .reservation::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 60%);
-            pointer-events: none;
         }
         .form-box { 
             max-width: 650px; margin: 0 auto; 
@@ -588,7 +645,6 @@
             box-shadow: 0 12px 35px rgba(212, 175, 55, 0.45);
         }
         .submit-btn:hover::after { transform: translateX(100%); }
-        .submit-btn:active { transform: translateY(-1px); }
 
         /* ========== FOOTER ========== */
         footer { 
@@ -624,25 +680,70 @@
             margin: 1.8rem 0; font-size: 0.95rem;
         }
         .contact-info span { display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
-        footer p { margin-bottom: 0.5rem; font-size: 0.92rem; }
         .copyright {
             margin-top: 2rem; padding-top: 1.8rem;
             border-top: 1px solid var(--border);
             opacity: 0.7; font-size: 0.85rem;
         }
 
-        /* ========== BACK TO TOP ========== */
-        .back-to-top {
-            position: fixed; bottom: 2rem; right: 2rem;
-            width: 50px; height: 50px; border-radius: 50%;
-            background: var(--gold-gradient); color: #050505;
-            border: none; font-size: 1.3rem; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: var(--transition);
-            z-index: 999; box-shadow: var(--shadow);
+        /* ========== FLOATING BUTTONS ========== */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 2rem;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: var(--transition);
+            z-index: 999;
+            animation: pulse-whatsapp 2s infinite;
         }
-        .back-to-top.visible { opacity: 1; visibility: visible; }
-        .back-to-top:hover { transform: translateY(-5px); }
+        .whatsapp-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.6);
+        }
+        @keyframes pulse-whatsapp {
+            0%, 100% { box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 4px 30px rgba(37, 211, 102, 0.7); }
+        }
+        
+        #topBtn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            color: #050505;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 998;
+            box-shadow: var(--shadow);
+        }
+        #topBtn.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        #topBtn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 992px) {
@@ -669,13 +770,13 @@
             .stats { grid-template-columns: 1fr 1fr; }
             .menu-grid { grid-template-columns: 1fr; }
             .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            #lightbox-close { top: 10px; right: 20px; font-size: 2.5rem; }
         }
         @media (max-width: 480px) {
             .hero-buttons { flex-direction: column; align-items: center; }
             .btn { width: 100%; max-width: 300px; }
             .stats { grid-template-columns: 1fr; }
             .gallery-grid { grid-template-columns: 1fr; }
-            .form-grid { grid-template-columns: 1fr; }
         }
 
         /* ========== ANIMATIONS ========== */
@@ -683,12 +784,7 @@
             from { opacity: 0; transform: translateY(50px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
         
-        /* Scroll animation classes */
         .animate-on-scroll {
             opacity: 0; transform: translateY(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
@@ -697,7 +793,6 @@
             opacity: 1; transform: translateY(0);
         }
         
-        /* Staggered animation delays */
         .stagger-1 { transition-delay: 0.1s; }
         .stagger-2 { transition-delay: 0.2s; }
         .stagger-3 { transition-delay: 0.3s; }
@@ -705,49 +800,61 @@
     </style>
 </head>
 <body>
-    <!-- Preloader -->
+
+    <!-- PROGRESS BAR -->
+    <div id="progressBar"></div>
+
+    <!-- PRELOADER -->
     <div class="preloader" id="preloader">
         <div class="loader"></div>
     </div>
 
-    <!-- Navigation -->
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+        <button id="lightbox-close">&times;</button>
+        <img id="lightbox-img" src="" alt="Full size">
+    </div>
+
+    <!-- NAVIGATION -->
     <nav id="navbar">
         <a href="#" class="logo">NOOR</a>
-        <button class="mobile-btn" id="mobileBtn" aria-label="Toggle menu">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="#home" class="active">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#menu">Menu</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#reservation">Reservations</a></li>
-        </ul>
+        <div class="nav-wrapper">
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#reservation">Reservations</a></li>
+            </ul>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+            <button class="mobile-btn" id="mobileBtn" aria-label="Toggle menu">☰</button>
+        </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION -->
     <section class="hero" id="home">
+        <video class="hero-video" autoplay muted loop playsinline>
+            <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4">
+        </video>
         <div class="hero-content">
             <span class="tagline">✦ Est. 2018 • New Delhi ✦</span>
-            <h1>Where Tradition Meets Elegance</h1>
+            <h1>Luxury Dining Experience</h1>
             <p>Experience the finest Indian culinary artistry, crafted with premium organic ingredients and served in a luxurious ambiance designed for unforgettable moments.</p>
             <div class="hero-buttons">
-                <a href="#menu" class="btn btn-primary">
-                    <span>View Menu</span>
-                </a>
-                <a href="#reservation" class="btn btn-outline">
-                    <span>Book a Table</span>
-                </a>
+                <a href="#menu" class="btn btn-primary">Explore Menu</a>
+                <a href="#reservation" class="btn btn-outline">Book a Table</a>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ABOUT SECTION -->
     <section id="about" class="animate-on-scroll">
         <div class="about-grid">
             <div class="about-text">
                 <span class="section-tag">Our Philosophy</span>
                 <h3>Crafting Memories, One Plate at a Time</h3>
-                <p>At NOOR, we believe dining is an art form. Our kitchen blends ancient spice traditions with modern culinary techniques, sourcing hand-picked ingredients from local organic farms and international markets.</p>
-                <p>Every dish is meticulously prepared by our award-winning chefs to deliver a symphony of flavors that linger long after your meal.</p>
+                <p>At NOOR, we believe dining is an art form. Our kitchen blends ancient spice traditions with modern culinary techniques, sourcing hand-picked ingredients from local organic farms.</p>
+                <p>Every dish is meticulously prepared by our award-winning chefs to deliver a symphony of flavors.</p>
                 <div class="features">
                     <div class="feature"><span class="feature-icon">✦</span> 100% Organic Ingredients</div>
                     <div class="feature"><span class="feature-icon">✦</span> Award-Winning Chefs</div>
@@ -758,11 +865,11 @@
             <div class="about-card animate-on-scroll stagger-1">
                 <span class="about-card-icon">🏆</span>
                 <h4>Michelin Recommended</h4>
-                <p>Recognized for culinary excellence and exceptional hospitality across 5 consecutive years.</p>
+                <p>Recognized for culinary excellence across 5 consecutive years.</p>
             </div>
         </div>
         
-        <!-- Stats Counter -->
+        <!-- STATS -->
         <div class="stats">
             <div class="stat-item animate-on-scroll stagger-1">
                 <span class="stat-number" data-target="8">0</span>
@@ -783,14 +890,18 @@
         </div>
     </section>
 
-    <!-- Menu Section -->
+    <!-- MENU SECTION -->
     <section id="menu" class="animate-on-scroll">
         <div class="section-header">
             <span class="section-tag">Curated Selections</span>
             <h2 class="section-title">Our Menu</h2>
-            <p class="subtitle">Explore our carefully crafted dishes, priced in Indian Rupees</p>
+            <p class="subtitle">Explore our carefully crafted dishes</p>
         </div>
 
+        <!-- SEARCH -->
+        <input type="text" class="menu-search" id="menuSearch" placeholder="Search dishes...">
+
+        <!-- TABS -->
         <div class="menu-tabs">
             <button class="tab-btn active" data-category="starters">Starters</button>
             <button class="tab-btn" data-category="mains">Main Course</button>
@@ -798,150 +909,159 @@
             <button class="tab-btn" data-category="drinks">Drinks</button>
         </div>
 
+        <!-- MENU GRID -->
         <div class="menu-grid" id="menuContainer">
             <!-- Starters -->
             <div class="menu-item category-starters fade-in">
-                <div class="item-header">
-                    <div class="item-name">Galouti Kebab</div>
-                    <div class="item-price">₹850</div>
-                </div>
-                <p class="item-desc">Melt-in-mouth minced lamb, infused with 24 spices, served on saffron paratha.</p>
-                <div class="item-meta">
-                    <span>🔥 Chef's Choice</span>
-                    <span>🕒 15 min</span>
-                </div>
-            </div>
-            <div class="menu-item category-starters fade-in">
-                <div class="item-header">
-                    <div class="item-name">Paneer Tikka Royal</div>
-                    <div class="item-price">₹720</div>
-                </div>
-                <p class="item-desc">Cottage cheese marinated in hung curd & roasted bell peppers, smoked with cloves.</p>
-                <div class="item-meta">
-                    <span>🌿 Vegetarian</span>
-                    <span>🕒 12 min</span>
+                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&q=80" alt="Kebab" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Galouti Kebab</div>
+                        <div class="item-price">₹850</div>
+                    </div>
+                    <p class="item-desc">Melt-in-mouth minced lamb, infused with 24 spices, served on saffron paratha.</p>
+                    <div class="item-meta">
+                        <span>🔥 Chef's Choice</span>
+                        <span>🕒 15 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-starters fade-in">
-                <div class="item-header">
-                    <div class="item-name">Jumbo Prawn Calamari</div>
-                    <div class="item-price">₹1,100</div>
-                </div>
-                <p class="item-desc">Crispy fried tiger prawns, served with mint-yogurt dip & lemon wedge.</p>
-                <div class="item-meta">
-                    <span>🦐 Seafood</span>
-                    <span>🕒 10 min</span>
+                <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Paneer Tikka" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Paneer Tikka Royal</div>
+                        <div class="item-price">₹720</div>
+                    </div>
+                    <p class="item-desc">Cottage cheese marinated in hung curd & roasted bell peppers, smoked with cloves.</p>
+                    <div class="item-meta">
+                        <span>🌿 Vegetarian</span>
+                        <span>🕒 12 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-starters fade-in">
-                <div class="item-header">
-                    <div class="item-name">Wild Mushroom Soup</div>
-                    <div class="item-price">₹450</div>
-                </div>
-                <p class="item-desc">Creamy forest mushroom blend, truffle oil drizzle, fresh herb garnish.</p>
-                <div class="item-meta">
-                    <span>🌿 Vegetarian</span>
-                    <span>🕒 8 min</span>
+                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&q=80" alt="Prawn" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Jumbo Prawn Calamari</div>
+                        <div class="item-price">₹1,100</div>
+                    </div>
+                    <p class="item-desc">Crispy fried tiger prawns, served with mint-yogurt dip & lemon wedge.</p>
+                    <div class="item-meta">
+                        <span>🦐 Seafood</span>
+                        <span>🕒 10 min</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Mains -->
             <div class="menu-item category-mains hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Butter Chicken Noir</div>
-                    <div class="item-price">₹1,250</div>
-                </div>
-                <p class="item-desc">Tandoor-roasted chicken, silky tomato-cashew gravy, finished with cream & fenugreek.</p>
-                <div class="item-meta">
-                    <span>🌟 Signature</span>
-                    <span>🕒 20 min</span>
-                </div>
-            </div>
-            <div class="menu-item category-mains hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Rogan Josh Premium</div>
-                    <div class="item-price">₹1,450</div>
-                </div>
-                <p class="item-desc">Slow-cooked lamb shank in authentic Kashmiri spice blend, served with saffron rice.</p>
-                <div class="item-meta">
-                    <span>🔥 Spicy</span>
-                    <span>🕒 25 min</span>
+                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80" alt="Butter Chicken" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Butter Chicken Noir</div>
+                        <div class="item-price">₹1,250</div>
+                    </div>
+                    <p class="item-desc">Tandoor-roasted chicken, silky tomato-cashew gravy, finished with cream & fenugreek.</p>
+                    <div class="item-meta">
+                        <span>🌟 Signature</span>
+                        <span>🕒 20 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-mains hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Dal Bukhara</div>
-                    <div class="item-price">₹950</div>
-                </div>
-                <p class="item-desc">Black lentils simmered overnight with butter, garlic, and smoked charcoal.</p>
-                <div class="item-meta">
-                    <span>🌿 Vegetarian</span>
-                    <span>🕒 10 min</span>
+                <img src="https://images.unsplash.com/photo-1585937421612-70e008356f67?w=600&q=80" alt="Biryani" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Royal Biryani</div>
+                        <div class="item-price">₹950</div>
+                    </div>
+                    <p class="item-desc">Aromatic basmati rice, slow-cooked meat, saffron, and traditional spices.</p>
+                    <div class="item-meta">
+                        <span>🔥 Popular</span>
+                        <span>🕒 25 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-mains hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Fish Amritsari Fry</div>
-                    <div class="item-price">₹1,150</div>
-                </div>
-                <p class="item-desc">Fresh river fish in crispy gram flour coating, tangy tamarind chutney, lemon rice.</p>
-                <div class="item-meta">
-                    <span>🐟 Seafood</span>
-                    <span>🕒 18 min</span>
+                <img src="https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=600&q=80" alt="Dal" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Dal Bukhara</div>
+                        <div class="item-price">₹950</div>
+                    </div>
+                    <p class="item-desc">Black lentils simmered overnight with butter, garlic, and smoked charcoal.</p>
+                    <div class="item-meta">
+                        <span>🌿 Vegetarian</span>
+                        <span>🕒 10 min</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Desserts -->
             <div class="menu-item category-desserts hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Saffron Phirni</div>
-                    <div class="item-price">₹480</div>
-                </div>
-                <p class="item-desc">Silky ground rice pudding, Kashmiri saffron, pistachios, rose petals.</p>
-                <div class="item-meta">
-                    <span>🌿 Veg</span>
-                    <span>🕒 5 min</span>
+                <img src="https://images.unsplash.com/photo-1549396535-c11d5c55b9df?w=600&q=80" alt="Dessert" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Saffron Phirni</div>
+                        <div class="item-price">₹480</div>
+                    </div>
+                    <p class="item-desc">Silky ground rice pudding, Kashmiri saffron, pistachios, rose petals.</p>
+                    <div class="item-meta">
+                        <span>🌿 Veg</span>
+                        <span>🕒 5 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-desserts hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Gulab Jamun Cheese Cake</div>
-                    <div class="item-price">₹620</div>
-                </div>
-                <p class="item-desc">Fusion dessert: classic cheesecake infused with rose syrup & cardamom crumbs.</p>
-                <div class="item-meta">
-                    <span>🌟 Popular</span>
-                    <span>🕒 5 min</span>
+                <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80" alt="Cheesecake" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Gulab Jamun Cheesecake</div>
+                        <div class="item-price">₹620</div>
+                    </div>
+                    <p class="item-desc">Fusion dessert: classic cheesecake infused with rose syrup & cardamom.</p>
+                    <div class="item-meta">
+                        <span>🌟 Popular</span>
+                        <span>🕒 5 min</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Drinks -->
             <div class="menu-item category-drinks hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Royal Kashmiri Kahwa</div>
-                    <div class="item-price">₹350</div>
-                </div>
-                <p class="item-desc">Traditional green tea, saffron, almonds, cinnamon, served in copper cup.</p>
-                <div class="item-meta">
-                    <span>🍵 Hot</span>
-                    <span>🕒 3 min</span>
+                <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Tea" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Royal Kashmiri Kahwa</div>
+                        <div class="item-price">₹350</div>
+                    </div>
+                    <p class="item-desc">Traditional green tea, saffron, almonds, cinnamon, served in copper cup.</p>
+                    <div class="item-meta">
+                        <span>🍵 Hot</span>
+                        <span>🕒 3 min</span>
+                    </div>
                 </div>
             </div>
             <div class="menu-item category-drinks hidden fade-in">
-                <div class="item-header">
-                    <div class="item-name">Mango Lassi Royale</div>
-                    <div class="item-price">₹280</div>
-                </div>
-                <p class="item-desc">Fresh Alphonso mango blend, thick yogurt, cardamom, served chilled.</p>
-                <div class="item-meta">
-                    <span>🥭 Refreshing</span>
-                    <span>🕒 4 min</span>
+                <img src="https://images.unsplash.com/photo-1546171753-97dcd08c26a1?w=600&q=80" alt="Lassi" onclick="openLightbox(this.src)">
+                <div class="menu-content">
+                    <div class="item-header">
+                        <div class="item-name">Mango Lassi Royale</div>
+                        <div class="item-price">₹280</div>
+                    </div>
+                    <p class="item-desc">Fresh Alphonso mango blend, thick yogurt, cardamom, served chilled.</p>
+                    <div class="item-meta">
+                        <span>🥭 Refreshing</span>
+                        <span>🕒 4 min</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- TESTIMONIALS -->
     <section class="testimonials animate-on-scroll">
         <div class="section-header">
             <span class="section-tag">Guest Experiences</span>
@@ -949,27 +1069,27 @@
         </div>
         <div class="testimonial-grid">
             <div class="testimonial-card">
-                <p class="testimonial-text">"An unforgettable evening! The Galouti Kebab melted in my mouth, and the ambiance transported me to royal India. Will definitely return."</p>
+                <p class="testimonial-text">"An unforgettable evening! The Galouti Kebab melted in my mouth, and the ambiance transported me to royal India."</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">PS</div>
                     <div class="author-info">
                         <h5>Priya Sharma</h5>
-                        <p>Food Critic, Delhi Times</p>
+                        <p>Food Critic</p>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
-                <p class="testimonial-text">"Celebrated our anniversary here. The private dining suite, personalized menu, and impeccable service made it truly magical. Thank you, NOOR!"</p>
+                <p class="testimonial-text">"Celebrated our anniversary here. The private dining suite and impeccable service made it truly magical."</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">RK</div>
                     <div class="author-info">
                         <h5>Rahul & Kavita</h5>
-                        <p>Anniversary Celebration</p>
+                        <p>Anniversary</p>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
-                <p class="testimonial-text">"As a vegetarian, I'm often limited, but NOOR's creative plant-based dishes were extraordinary. The Dal Bukhara is a masterpiece!"</p>
+                <p class="testimonial-text">"As a vegetarian, NOOR's creative plant-based dishes were extraordinary. The Dal Bukhara is a masterpiece!"</p>
                 <div class="testimonial-author">
                     <div class="author-avatar">AM</div>
                     <div class="author-info">
@@ -979,14 +1099,9 @@
                 </div>
             </div>
         </div>
-        <div class="testimonial-nav">
-            <div class="testimonial-dot active" data-index="0"></div>
-            <div class="testimonial-dot" data-index="1"></div>
-            <div class="testimonial-dot" data-index="2"></div>
-        </div>
     </section>
 
-    <!-- Gallery Section WITH REAL IMAGES -->
+    <!-- GALLERY -->
     <section id="gallery" class="gallery animate-on-scroll">
         <div class="section-header">
             <span class="section-tag">Visual Journey</span>
@@ -994,51 +1109,37 @@
         </div>
         <div class="gallery-grid">
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Luxury Restaurant Interior">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Interior" onclick="openLightbox(this.src)">
                 <div class="gallery-overlay">
                     <h4>Luxury Dining Room</h4>
-                    <p>Elegant ambiance with modern sophistication</p>
+                    <p>Elegant ambiance</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1631515243349-e06020b5c36b?w=800&q=80" alt="Indian Food Plating">
+                <img src="https://images.unsplash.com/photo-1631515243349-e06020b5c36b?w=800&q=80" alt="Food" onclick="openLightbox(this.src)">
                 <div class="gallery-overlay">
                     <h4>Signature Plating</h4>
                     <p>Artistry on every plate</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1559339352-11b06f61244c?w=800&q=80" alt="Dark Elegant Restaurant">
+                <img src="https://images.unsplash.com/photo-1559339352-11b06f61244c?w=800&q=80" alt="Ambiance" onclick="openLightbox(this.src)">
                 <div class="gallery-overlay">
                     <h4>Intimate Atmosphere</h4>
-                    <p>Dark, moody, and alluring spaces</p>
+                    <p>Dark, moody spaces</p>
                 </div>
             </div>
             <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Gourmet Indian Cuisine">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Cuisine" onclick="openLightbox(this.src)">
                 <div class="gallery-overlay">
                     <h4>Gourmet Cuisine</h4>
-                    <p>Exquisite flavors, beautiful presentation</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?w=800&q=80" alt="Fine Dining Table Setting">
-                <div class="gallery-overlay">
-                    <h4>Private Dining</h4>
-                    <p>Exclusive suites for special occasions</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80" alt="Cocktails and Bar">
-                <div class="gallery-overlay">
-                    <h4>Premium Bar</h4>
-                    <p>Curated wines & signature cocktails</p>
+                    <p>Exquisite flavors</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Reservation Section -->
+    <!-- RESERVATION -->
     <section class="reservation" id="reservation">
         <div class="section-header">
             <span class="section-tag">Book Your Experience</span>
@@ -1048,20 +1149,20 @@
             <form onsubmit="handleBooking(event)">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="name">Full Name *</label>
-                        <input type="text" id="name" required placeholder="Amit Sharma">
+                        <label>Full Name *</label>
+                        <input type="text" required placeholder="Amit Sharma">
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone *</label>
-                        <input type="tel" id="phone" required placeholder="+91 98765 43210">
+                        <label>Phone *</label>
+                        <input type="tel" required placeholder="+91 98765 43210">
                     </div>
                     <div class="form-group">
-                        <label for="datetime">Date & Time *</label>
-                        <input type="datetime-local" id="datetime" required>
+                        <label>Date & Time *</label>
+                        <input type="datetime-local" required>
                     </div>
                     <div class="form-group">
-                        <label for="guests">Guests *</label>
-                        <select id="guests" required>
+                        <label>Guests *</label>
+                        <select required>
                             <option value="1">1 Person</option>
                             <option value="2" selected>2 People</option>
                             <option value="3">3 People</option>
@@ -1070,33 +1171,34 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="requests">Special Requests</label>
-                    <textarea id="requests" rows="3" placeholder="Dietary needs, occasion, seating preference..."></textarea>
+                    <label>Special Requests</label>
+                    <textarea rows="3" placeholder="Dietary needs, occasion..."></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Confirm Reservation ✨</button>
             </form>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer>
         <span class="footer-logo">NOOR</span>
         <div class="socials">
-            <a href="#" aria-label="Instagram">📷 Instagram</a>
-            <a href="#" aria-label="Facebook">📘 Facebook</a>
-            <a href="#" aria-label="WhatsApp">💬 WhatsApp</a>
+            <a href="#">📷 Instagram</a>
+            <a href="#">📘 Facebook</a>
+            <a href="#">💬 WhatsApp</a>
         </div>
         <div class="contact-info">
             <span>📍 42, Heritage Lane, New Delhi, 110001</span>
             <span>📞 +91 11 4050 6789</span>
             <span>✉️ reserve@noor-dining.com</span>
         </div>
-        <p>Open Daily: 12:00 PM - 11:30 PM | Happy Hours: 5 PM - 8 PM</p>
-        <p class="copyright">© 2026 NOOR Restaurant. All rights reserved. | Crafted with ❤️ for culinary excellence</p>
+        <p>Open Daily: 12:00 PM - 11:30 PM</p>
+        <p class="copyright">© 2026 NOOR Restaurant. All rights reserved.</p>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+    <!-- FLOATING BUTTONS -->
+    <a href="https://wa.me/919876543210" class="whatsapp-btn" aria-label="WhatsApp">💬</a>
+    <button id="topBtn" aria-label="Back to top">↑</button>
 
     <script>
         // ========== PRELOADER ==========
@@ -1106,56 +1208,49 @@
             }, 800);
         });
 
+        // ========== SCROLL PROGRESS ==========
+        window.addEventListener('scroll', () => {
+            let scroll = document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('progressBar').style.width = (scroll / height) * 100 + '%';
+            
+            // Navbar scroll effect
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+            
+            // Back to top button
+            document.getElementById('topBtn').classList.toggle('visible', window.scrollY > 300);
+            
+            updateActiveNavLink();
+        });
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+
+        // Load saved theme
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+            document.querySelector('.theme-toggle').textContent = '☀️';
+        }
+
         // ========== NAVIGATION ==========
-        const navbar = document.getElementById('navbar');
         const mobileBtn = document.getElementById('mobileBtn');
         const navLinks = document.getElementById('navLinks');
         
-        // Scroll effect
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 50);
-            
-            // Back to top button
-            const backToTop = document.getElementById('backToTop');
-            backToTop.classList.toggle('visible', window.scrollY > 500);
-            
-            // Active nav link on scroll
-            updateActiveNavLink();
-        });
-        
-        // Mobile menu toggle
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
-            mobileBtn.setAttribute('aria-expanded', navLinks.classList.contains('active'));
         });
         
-        // Close mobile menu when clicking a link
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', () => {
                 navLinks.classList.remove('active');
-                mobileBtn.setAttribute('aria-expanded', 'false');
             });
         });
-        
-        // Smooth scroll with offset for fixed header
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const headerOffset = 80;
-                    const elementPosition = target.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                    
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Update active nav link based on scroll position
+
         function updateActiveNavLink() {
             const sections = document.querySelectorAll('section[id]');
             const scrollY = window.pageYOffset;
@@ -1176,36 +1271,73 @@
             });
         }
 
+        // ========== LIGHTBOX ==========
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // ========== MENU SEARCH ==========
+        document.getElementById('menuSearch').addEventListener('input', function() {
+            let val = this.value.toLowerCase();
+            document.querySelectorAll('.menu-item').forEach(item => {
+                let text = item.innerText.toLowerCase();
+                item.style.display = text.includes(val) ? 'block' : 'none';
+            });
+        });
+
         // ========== MENU TABS ==========
         const tabBtns = document.querySelectorAll('.tab-btn');
         const menuItems = document.querySelectorAll('.menu-item');
         
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // Update active tab
                 tabBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 
-                // Filter menu items
                 const category = btn.dataset.category;
                 menuItems.forEach(item => {
                     item.classList.add('hidden');
                     item.classList.remove('fade-in');
                 });
                 
-                // Show items with staggered animation
                 const visibleItems = document.querySelectorAll(`.category-${category}`);
                 visibleItems.forEach((item, index) => {
                     setTimeout(() => {
                         item.classList.remove('hidden');
-                        void item.offsetWidth; // Trigger reflow
+                        void item.offsetWidth;
                         item.classList.add('fade-in');
-                    }, index * 100); // Stagger effect
+                    }, index * 100);
                 });
             });
         });
 
-        // ========== STATS COUNTER ANIMATION ==========
+        // ========== STATS COUNTER ==========
         const statNumbers = document.querySelectorAll('.stat-number');
         let statsAnimated = false;
         
@@ -1213,6 +1345,8 @@
             if (statsAnimated) return;
             
             const section = document.querySelector('.stats');
+            if (!section) return;
+            
             const sectionTop = section.getBoundingClientRect().top;
             const windowHeight = window.innerHeight;
             
@@ -1236,16 +1370,10 @@
         }
         
         window.addEventListener('scroll', animateStats);
-        // Initial check
         setTimeout(animateStats, 1000);
 
-        // ========== SCROLL ANIMATIONS (Intersection Observer) ==========
+        // ========== SCROLL ANIMATIONS ==========
         const animateOnScroll = document.querySelectorAll('.animate-on-scroll');
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1253,17 +1381,13 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.15 });
         
         animateOnScroll.forEach(el => observer.observe(el));
 
-        // ========== TESTIMONIAL NAVIGATION ==========
-        const testimonialDots = document.querySelectorAll('.testimonial-dot');
-        testimonialDots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                testimonialDots.forEach(d => d.classList.remove('active'));
-                dot.classList.add('active');
-            });
+        // ========== BACK TO TOP ==========
+        document.getElementById('topBtn').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // ========== FORM HANDLING ==========
@@ -1272,32 +1396,22 @@
             const btn = e.target.querySelector('.submit-btn');
             const originalText = btn.innerHTML;
             
-            // Loading state
             btn.disabled = true;
             btn.innerHTML = 'Reserving... ✨';
             
-            // Simulate API call
             setTimeout(() => {
-                alert('🎉 Thank you! Your table at NOOR has been reserved. We will send a confirmation SMS shortly.');
+                alert('🎉 Thank you! Your table at NOOR has been reserved.');
                 e.target.reset();
                 btn.disabled = false;
                 btn.innerHTML = originalText;
             }, 1500);
         }
 
-        // ========== BACK TO TOP ==========
-        document.getElementById('backToTop').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // ========== INITIALIZE ==========
+        // Set min date for reservation
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().slice(0, 16);
-            document.getElementById('datetime').min = today;
-            
-            setTimeout(() => {
-                document.querySelector('.hero-content').style.animation = 'fadeUp 1s ease forwards';
-            }, 300);
+            const dateInput = document.querySelector('input[type="datetime-local"]');
+            if (dateInput) dateInput.min = today;
         });
     </script>
 </body>
