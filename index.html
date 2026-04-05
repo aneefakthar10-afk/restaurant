@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NOOR - Fine Indian dining experience in New Delhi. Award-winning cuisine, luxury ambiance, and unforgettable moments.">
+    <meta property="og:title" content="NOOR | Fine Dining Experience">
+    <meta property="og:description" content="Where Tradition Meets Elegance - Premium Indian Cuisine">
+    <title>NOOR | Fine Dining Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ========== CSS VARIABLES & BASE ========== */
+        :root {
+            --bg: #050505;
+            --surface: #0f0f0f;
+            --surface-elevated: #151515;
+            --gold: #d4af37;
+            --gold-light: #f4d03f;
+            --gold-gradient: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            --text: #f2f2f2;
+            --text-muted: #a3a3a3;
+            --border: rgba(212, 175, 55, 0.3);
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+            --shadow-hover: 0 20px 50px rgba(212, 175, 55, 0.25);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: all 0.2s ease;
+            --radius: 16px;
+            --radius-lg: 24px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== CUSTOM SCROLLBAR ========== */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--gold); 
+            border-radius: 4px;
+            border: 2px solid var(--bg);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+
+        /* ========== PRELOADER ========== */
+        .preloader {
+            position: fixed; inset: 0; background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; transition: opacity 0.5s, visibility 0.5s;
+        }
+        .preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader {
+            width: 60px; height: 60px; border: 3px solid var(--glass);
+            border-top-color: var(--gold); border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ========== NAVIGATION ========== */
+        nav {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 1.2rem 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border); z-index: 1000;
+            transition: var(--transition);
+        }
+        nav.scrolled { 
+            padding: 0.8rem 5%; 
+            background: rgba(5, 5, 5, 0.95);
+            box-shadow: var(--shadow);
+        }
+        .logo { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.9rem; font-weight: 700; 
+            color: var(--gold); letter-spacing: 4px; 
+            text-transform: uppercase; text-decoration: none;
+            position: relative;
+        }
+        .logo::after {
+            content: ''; position: absolute; bottom: -8px; left: 50%;
+            width: 30px; height: 2px; background: var(--gold);
+            transform: translateX(-50%); border-radius: 2px;
+        }
+        .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+        .nav-links a { 
+            color: var(--text); text-decoration: none; 
+            font-weight: 500; font-size: 0.92rem; 
+            position: relative; transition: var(--transition-fast);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            padding: 0.5rem 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px; background: var(--gold-gradient);
+            transition: var(--transition); border-radius: 2px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .mobile-btn { 
+            display: none; background: none; border: none; 
+            color: var(--text); font-size: 1.8rem; cursor: pointer;
+            padding: 0.5rem; border-radius: 8px; transition: var(--transition-fast);
+        }
+        .mobile-btn:hover { background: var(--glass); color: var(--gold); }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; 
+            text-align: center; padding: 0 5%; position: relative; overflow: hidden;
+            background: 
+                radial-gradient(ellipse at 20% 15%, rgba(212, 175, 55, 0.12) 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 75%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg) 0%, #0a0a0a 60%, #070707 100%);
+        }
+        .hero::before {
+            content: ''; position: absolute; width: 700px; height: 700px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.06) 0%, transparent 75%);
+            top: -10%; right: -15%; border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        .hero::after {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
+            bottom: -5%; left: -10%; border-radius: 50%;
+            animation: float 25s ease-in-out infinite reverse;
+            z-index: 0;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.02); }
+        }
+        .hero-content { 
+            max-width: 850px; position: relative; z-index: 2; 
+            animation: fadeUp 1s ease forwards;
+        }
+        .tagline { 
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1.5rem; border: 1px solid var(--gold); 
+            color: var(--gold); font-size: 0.82rem; 
+            letter-spacing: 4px; text-transform: uppercase; 
+            margin-bottom: 2rem; border-radius: 50px;
+            background: rgba(212, 175, 55, 0.08);
+        }
+        .hero h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(3rem, 8vw, 6rem); 
+            margin-bottom: 1.5rem; line-height: 1.05; 
+            background: linear-gradient(135deg, #fff 25%, var(--gold) 90%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+        .hero p { 
+            font-size: 1.15rem; color: var(--text-muted); 
+            margin-bottom: 2.8rem; max-width: 650px; 
+            margin-inline: auto; line-height: 1.8;
+        }
+        .hero-buttons { 
+            display: flex; gap: 1.2rem; justify-content: center; 
+            flex-wrap: wrap; margin-top: 1rem;
+        }
+        .btn { 
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 1.1rem 2.8rem; text-decoration: none; 
+            font-weight: 600; border-radius: 50px; 
+            transition: var(--transition); 
+            text-transform: uppercase; letter-spacing: 1.5px; 
+            font-size: 0.88rem; cursor: pointer; 
+            border: 2px solid transparent; position: relative;
+            overflow: hidden; gap: 0.5rem;
+        }
+        .btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gold-gradient);
+            opacity: 0; transition: var(--transition);
+            z-index: -1; border-radius: inherit;
+        }
+        .btn-primary { 
+            background: var(--gold); color: #050505; 
+            border-color: var(--gold);
+        }
+        .btn-primary:hover { 
+            background: transparent; color: var(--gold);
+            transform: translateY(-4px); 
+            box-shadow: var(--shadow-hover);
+        }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-outline { 
+            background: transparent; color: var(--text); 
+            border-color: var(--text);
+        }
+        .btn-outline:hover { 
+            background: var(--text); color: var(--bg); 
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(242, 242, 242, 0.2);
+        }
+        .btn i { font-size: 1.1rem; }
+
+        /* ========== SECTIONS ========== */
+        section { padding: 6rem 5%; max-width: 1300px; margin: 0 auto; }
+        .section-header { 
+            text-align: center; margin-bottom: 4rem; 
+            position: relative; padding-bottom: 1.5rem;
+        }
+        .section-header::after {
+            content: ''; position: absolute; bottom: 0; left: 50%;
+            width: 60px; height: 3px; background: var(--gold-gradient);
+            transform: translateX(-50%); border-radius: 3px;
+        }
+        .section-tag { 
+            color: var(--gold); text-transform: uppercase; 
+            letter-spacing: 4px; font-size: 0.85rem; 
+            margin-bottom: 1rem; display: block; font-weight: 600;
+        }
+        .section-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: clamp(2.2rem, 5vw, 3.5rem); 
+            margin-bottom: 1.2rem; line-height: 1.2;
+        }
+        .subtitle { 
+            color: var(--text-muted); max-width: 650px; 
+            margin: 0 auto; font-size: 1.05rem;
+        }
+
+        /* ========== ABOUT SECTION ========== */
+        .about-grid { 
+            display: grid; grid-template-columns: 1.1fr 0.9fr; 
+            gap: 4.5rem; align-items: center; 
+        }
+        .about-text h3 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2rem; margin-bottom: 1.3rem; 
+            color: var(--gold-light); line-height: 1.3;
+        }
+        .about-text p { 
+            color: var(--text-muted); margin-bottom: 1.6rem; 
+            font-size: 1.02rem;
+        }
+        .features { 
+            display: grid; grid-template-columns: 1fr 1fr; 
+            gap: 1.3rem; margin-top: 2rem;
+        }
+        .feature { 
+            display: flex; align-items: flex-start; gap: 0.9rem; 
+            color: var(--text); padding: 0.8rem 0;
+        }
+        .feature-icon {
+            color: var(--gold); font-weight: bold; 
+            font-size: 1.2rem; min-width: 24px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        .about-card {
+            background: var(--surface-elevated); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius-lg); 
+            padding: 2.8rem; text-align: center;
+            position: relative; overflow: hidden;
+            transition: var(--transition);
+        }
+        .about-card:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--gold);
+            box-shadow: var(--shadow-hover);
+        }
+        .about-card::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(212,175,55,0.1) 0%, transparent 60%);
+            opacity: 0; transition: var(--transition);
+        }
+        .about-card:hover::before { opacity: 1; }
+        .about-card-icon { 
+            font-size: 4.5rem; margin-bottom: 1.5rem; 
+            display: block; animation: bounce 3s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .about-card h4 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.6rem; margin-bottom: 0.8rem;
+        }
+        .about-card p { 
+            color: var(--text-muted); font-size: 0.98rem;
+        }
+
+        /* ========== STATS COUNTER ========== */
+        .stats {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem; margin: 3.5rem 0; text-align: center;
+        }
+        .stat-item { padding: 1.5rem; }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem; font-weight: 700;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block; margin-bottom: 0.3rem;
+            line-height: 1;
+        }
+        .stat-label {
+            color: var(--text-muted); font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* ========== MENU SECTION ========== */
+        .menu-tabs { 
+            display: flex; justify-content: center; gap: 0.8rem; 
+            margin-bottom: 3rem; flex-wrap: wrap;
+        }
+        .tab-btn { 
+            padding: 0.8rem 2rem; background: var(--glass); 
+            border: 1px solid var(--border); color: var(--text); 
+            font-weight: 600; cursor: pointer; border-radius: 50px; 
+            transition: var(--transition); font-size: 0.88rem; 
+            text-transform: uppercase; letter-spacing: 1.2px;
+            position: relative; overflow: hidden;
+        }
+        .tab-btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gold-gradient);
+            opacity: 0; transition: var(--transition);
+            z-index: -1; border-radius: inherit;
+        }
+        .tab-btn:hover, .tab-btn.active { 
+            color: #050505; border-color: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+        .tab-btn:hover::before, .tab-btn.active::before { opacity: 1; }
+        
+        .menu-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 1.8rem;
+        }
+        .menu-item { 
+            background: var(--surface); padding: 2rem; 
+            border-radius: var(--radius); border: 1px solid var(--border); 
+            transition: var(--transition); position: relative; 
+            overflow: hidden; display: flex; flex-direction: column;
+        }
+        .menu-item:hover { 
+            transform: translateY(-8px); border-color: var(--gold); 
+            box-shadow: var(--shadow-hover);
+            background: var(--surface-elevated);
+        }
+        .menu-item::after { 
+            content: ''; position: absolute; top: 0; left: 0; 
+            width: 100%; height: 4px; 
+            background: var(--gold-gradient); 
+            transform: scaleX(0); transition: transform 0.5s ease;
+            transform-origin: left;
+        }
+        .menu-item:hover::after { transform: scaleX(1); }
+        .item-header { 
+            display: flex; justify-content: space-between; 
+            align-items: flex-start; margin-bottom: 1rem; 
+            padding-bottom: 0.8rem; border-bottom: 1px dashed var(--border);
+        }
+        .item-name { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 1.5rem; font-weight: 600; 
+            line-height: 1.3;
+        }
+        .item-price { 
+            color: var(--gold); font-weight: 700; 
+            font-size: 1.3rem; white-space: nowrap;
+            background: rgba(212, 175, 55, 0.15);
+            padding: 0.3rem 0.9rem; border-radius: 30px;
+        }
+        .item-desc { 
+            color: var(--text-muted); font-size: 1rem; 
+            margin-bottom: 1.2rem; flex-grow: 1;
+        }
+        .item-meta { 
+            display: flex; gap: 1.2rem; font-size: 0.85rem; 
+            color: var(--text-muted); flex-wrap: wrap;
+        }
+        .item-meta span { display: flex; align-items: center; gap: 0.4rem; }
+        .hidden { display: none; }
+        .fade-in { animation: fadeInUp 0.6s ease forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.04) 0%, transparent 100%);
+            position: relative; overflow: hidden;
+        }
+        .testimonial-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; margin-top: 2rem;
+        }
+        .testimonial-card {
+            background: var(--surface); padding: 2.2rem;
+            border-radius: var(--radius); border: 1px solid var(--border);
+            position: relative; transition: var(--transition);
+        }
+        .testimonial-card:hover {
+            transform: translateY(-5px); border-color: var(--gold);
+            box-shadow: var(--shadow-hover);
+        }
+        .testimonial-card::before {
+            content: '"'; position: absolute; top: 15px; left: 20px;
+            font-family: 'Playfair Display', serif; font-size: 5rem;
+            color: var(--gold); opacity: 0.15; line-height: 1;
+        }
+        .testimonial-text {
+            color: var(--text-muted); font-style: italic;
+            margin-bottom: 1.5rem; position: relative; z-index: 1;
+            line-height: 1.8;
+        }
+        .testimonial-author {
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .author-avatar {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--gold-gradient); display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 600; color: #050505; font-size: 1.1rem;
+        }
+        .author-info h5 { font-weight: 600; margin-bottom: 0.2rem; }
+        .author-info p { color: var(--text-muted); font-size: 0.9rem; }
+        .testimonial-nav {
+            display: flex; justify-content: center; gap: 0.8rem;
+            margin-top: 2.5rem;
+        }
+        .testimonial-dot {
+            width: 12px; height: 12px; border-radius: 50%;
+            background: var(--glass); border: 2px solid var(--border);
+            cursor: pointer; transition: var(--transition-fast);
+        }
+        .testimonial-dot.active {
+            background: var(--gold); border-color: var(--gold);
+            transform: scale(1.2);
+        }
+
+        /* ========== RESERVATION ========== */
+        .reservation { 
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.06) 0%, transparent 100%);
+            position: relative;
+        }
+        .reservation::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .form-box { 
+            max-width: 650px; margin: 0 auto; 
+            background: var(--surface-elevated); 
+            padding: 3rem; border-radius: var(--radius-lg); 
+            border: 1px solid var(--border); 
+            box-shadow: var(--shadow);
+            position: relative; z-index: 1;
+        }
+        .form-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.3rem;
+        }
+        .form-group { display: flex; flex-direction: column; margin-bottom: 1.4rem; }
+        .form-group label { 
+            margin-bottom: 0.6rem; color: var(--text-muted); 
+            font-size: 0.88rem; text-transform: uppercase; 
+            letter-spacing: 1.2px; font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 1.1rem 1.3rem; background: var(--glass); 
+            border: 1px solid var(--border); border-radius: 12px;
+            color: var(--text); font-family: inherit; 
+            font-size: 1rem; transition: var(--transition);
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            outline: none; border-color: var(--gold); 
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.2);
+            background: var(--glass-hover);
+        }
+        .submit-btn { 
+            width: 100%; padding: 1.3rem; 
+            background: var(--gold-gradient); color: #050505; 
+            border: none; border-radius: 12px; font-weight: 700; 
+            font-size: 1rem; text-transform: uppercase; 
+            letter-spacing: 1.5px; cursor: pointer; 
+            transition: var(--transition); position: relative;
+            overflow: hidden; margin-top: 0.5rem;
+        }
+        .submit-btn::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: translateX(-100%); transition: transform 0.6s;
+        }
+        .submit-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.45);
+        }
+        .submit-btn:hover::after { transform: translateX(100%); }
+        .submit-btn:active { transform: translateY(-1px); }
+
+        /* ========== GALLERY ========== */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem; margin-top: 2.5rem;
+        }
+        .gallery-item {
+            aspect-ratio: 4/3; border-radius: var(--radius);
+            background: linear-gradient(135deg, #1a1a1a, #222);
+            border: 1px solid var(--border); position: relative;
+            overflow: hidden; cursor: pointer;
+            transition: var(--transition);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem;
+        }
+        .gallery-item:hover {
+            transform: scale(1.03); border-color: var(--gold);
+            box-shadow: var(--shadow-hover);
+        }
+        .gallery-item::after {
+            content: '🖼️'; opacity: 0.7;
+        }
+        .gallery-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: var(--transition);
+            flex-direction: column; gap: 0.8rem; padding: 1.5rem;
+            text-align: center;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay h4 { font-family: 'Playfair Display', serif; }
+        .gallery-overlay p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* ========== FOOTER ========== */
+        footer { 
+            text-align: center; padding: 4rem 5% 3rem; 
+            border-top: 1px solid var(--border); 
+            background: linear-gradient(to bottom, #030303, #010101); 
+            color: var(--text-muted); margin-top: 3rem;
+        }
+        .footer-logo {
+            font-family: 'Playfair Display', serif; 
+            font-size: 2rem; color: var(--gold); 
+            letter-spacing: 4px; text-transform: uppercase;
+            margin-bottom: 1.5rem; display: block;
+        }
+        .socials { 
+            display: flex; justify-content: center; gap: 1.2rem; 
+            margin-bottom: 2rem; flex-wrap: wrap;
+        }
+        .socials a { 
+            color: var(--text); text-decoration: none; 
+            font-weight: 500; padding: 0.7rem 1.4rem; 
+            border: 1px solid var(--border); border-radius: 50px; 
+            transition: var(--transition); font-size: 0.92rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .socials a:hover { 
+            background: var(--gold); color: #050505; 
+            border-color: var(--gold); transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+        .contact-info {
+            display: flex; flex-direction: column; gap: 0.7rem;
+            margin: 1.8rem 0; font-size: 0.95rem;
+        }
+        .contact-info span { display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+        footer p { margin-bottom: 0.5rem; font-size: 0.92rem; }
+        .copyright {
+            margin-top: 2rem; padding-top: 1.8rem;
+            border-top: 1px solid var(--border);
+            opacity: 0.7; font-size: 0.85rem;
+        }
+
+        /* ========== BACK TO TOP ========== */
+        .back-to-top {
+            position: fixed; bottom: 2rem; right: 2rem;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--gold-gradient); color: #050505;
+            border: none; font-size: 1.3rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: var(--transition);
+            z-index: 999; box-shadow: var(--shadow);
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
+        .back-to-top:hover { transform: translateY(-5px); }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; text-align: center; }
+            .features { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .mobile-btn { display: block; }
+            .nav-links { 
+                position: fixed; top: 0; right: -100%; 
+                width: 85%; height: 100vh; 
+                background: rgba(5,5,5,0.98); 
+                flex-direction: column; justify-content: center; 
+                align-items: center; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+                backdrop-filter: blur(15px); border-left: 1px solid var(--border);
+                padding: 2rem;
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.2rem; padding: 1rem 0; }
+            .hero h1 { font-size: clamp(2.5rem, 9vw, 4.5rem); }
+            section { padding: 4.5rem 5%; }
+            .stats { grid-template-columns: 1fr 1fr; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .hero-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+            .stats { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeUp { 
+            from { opacity: 0; transform: translateY(50px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* Scroll animation classes */
+        .animate-on-scroll {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .animate-on-scroll.animated {
+            opacity: 1; transform: translateY(0);
+        }
+        
+        /* Staggered animation delays */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <a href="#" class="logo">NOOR</a>
+        <button class="mobile-btn" id="mobileBtn" aria-label="Toggle menu">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#reservation">Reservations</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <span class="tagline">✦ Est. 2018 • New Delhi ✦</span>
+            <h1>Where Tradition Meets Elegance</h1>
+            <p>Experience the finest Indian culinary artistry, crafted with premium organic ingredients and served in a luxurious ambiance designed for unforgettable moments.</p>
+            <div class="hero-buttons">
+                <a href="#menu" class="btn btn-primary">
+                    <span>View Menu</span>
+                </a>
+                <a href="#reservation" class="btn btn-outline">
+                    <span>Book a Table</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="animate-on-scroll">
+        <div class="about-grid">
+            <div class="about-text">
+                <span class="section-tag">Our Philosophy</span>
+                <h3>Crafting Memories, One Plate at a Time</h3>
+                <p>At NOOR, we believe dining is an art form. Our kitchen blends ancient spice traditions with modern culinary techniques, sourcing hand-picked ingredients from local organic farms and international markets.</p>
+                <p>Every dish is meticulously prepared by our award-winning chefs to deliver a symphony of flavors that linger long after your meal.</p>
+                <div class="features">
+                    <div class="feature"><span class="feature-icon">✦</span> 100% Organic Ingredients</div>
+                    <div class="feature"><span class="feature-icon">✦</span> Award-Winning Chefs</div>
+                    <div class="feature"><span class="feature-icon">✦</span> Premium Wine & Bar</div>
+                    <div class="feature"><span class="feature-icon">✦</span> Private Dining Suites</div>
+                </div>
+            </div>
+            <div class="about-card animate-on-scroll stagger-1">
+                <span class="about-card-icon">🏆</span>
+                <h4>Michelin Recommended</h4>
+                <p>Recognized for culinary excellence and exceptional hospitality across 5 consecutive years.</p>
+            </div>
+        </div>
+        
+        <!-- Stats Counter -->
+        <div class="stats">
+            <div class="stat-item animate-on-scroll stagger-1">
+                <span class="stat-number" data-target="8">0</span>
+                <span class="stat-label">Years of Excellence</span>
+            </div>
+            <div class="stat-item animate-on-scroll stagger-2">
+                <span class="stat-number" data-target="15">0</span>
+                <span class="stat-label">Awards Won</span>
+            </div>
+            <div class="stat-item animate-on-scroll stagger-3">
+                <span class="stat-number" data-target="50">0</span>
+                <span class="stat-label">Signature Dishes</span>
+            </div>
+            <div class="stat-item animate-on-scroll stagger-4">
+                <span class="stat-number" data-target="25">0</span>
+                <span class="stat-label">K+ Happy Guests</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="animate-on-scroll">
+        <div class="section-header">
+            <span class="section-tag">Curated Selections</span>
+            <h2 class="section-title">Our Menu</h2>
+            <p class="subtitle">Explore our carefully crafted dishes, priced in Indian Rupees</p>
+        </div>
+
+        <div class="menu-tabs">
+            <button class="tab-btn active" data-category="starters">Starters</button>
+            <button class="tab-btn" data-category="mains">Main Course</button>
+            <button class="tab-btn" data-category="desserts">Desserts</button>
+            <button class="tab-btn" data-category="drinks">Drinks</button>
+        </div>
+
+        <div class="menu-grid" id="menuContainer">
+            <!-- Starters -->
+            <div class="menu-item category-starters fade-in">
+                <div class="item-header">
+                    <div class="item-name">Galouti Kebab</div>
+                    <div class="item-price">₹850</div>
+                </div>
+                <p class="item-desc">Melt-in-mouth minced lamb, infused with 24 spices, served on saffron paratha.</p>
+                <div class="item-meta">
+                    <span>🔥 Chef's Choice</span>
+                    <span>🕒 15 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-starters fade-in">
+                <div class="item-header">
+                    <div class="item-name">Paneer Tikka Royal</div>
+                    <div class="item-price">₹720</div>
+                </div>
+                <p class="item-desc">Cottage cheese marinated in hung curd & roasted bell peppers, smoked with cloves.</p>
+                <div class="item-meta">
+                    <span>🌿 Vegetarian</span>
+                    <span>🕒 12 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-starters fade-in">
+                <div class="item-header">
+                    <div class="item-name">Jumbo Prawn Calamari</div>
+                    <div class="item-price">₹1,100</div>
+                </div>
+                <p class="item-desc">Crispy fried tiger prawns, served with mint-yogurt dip & lemon wedge.</p>
+                <div class="item-meta">
+                    <span>🦐 Seafood</span>
+                    <span>🕒 10 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-starters fade-in">
+                <div class="item-header">
+                    <div class="item-name">Wild Mushroom Soup</div>
+                    <div class="item-price">₹450</div>
+                </div>
+                <p class="item-desc">Creamy forest mushroom blend, truffle oil drizzle, fresh herb garnish.</p>
+                <div class="item-meta">
+                    <span>🌿 Vegetarian</span>
+                    <span>🕒 8 min</span>
+                </div>
+            </div>
+
+            <!-- Mains -->
+            <div class="menu-item category-mains hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Butter Chicken Noir</div>
+                    <div class="item-price">₹1,250</div>
+                </div>
+                <p class="item-desc">Tandoor-roasted chicken, silky tomato-cashew gravy, finished with cream & fenugreek.</p>
+                <div class="item-meta">
+                    <span>🌟 Signature</span>
+                    <span>🕒 20 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-mains hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Rogan Josh Premium</div>
+                    <div class="item-price">₹1,450</div>
+                </div>
+                <p class="item-desc">Slow-cooked lamb shank in authentic Kashmiri spice blend, served with saffron rice.</p>
+                <div class="item-meta">
+                    <span>🔥 Spicy</span>
+                    <span>🕒 25 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-mains hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Dal Bukhara</div>
+                    <div class="item-price">₹950</div>
+                </div>
+                <p class="item-desc">Black lentils simmered overnight with butter, garlic, and smoked charcoal.</p>
+                <div class="item-meta">
+                    <span>🌿 Vegetarian</span>
+                    <span>🕒 10 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-mains hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Fish Amritsari Fry</div>
+                    <div class="item-price">₹1,150</div>
+                </div>
+                <p class="item-desc">Fresh river fish in crispy gram flour coating, tangy tamarind chutney, lemon rice.</p>
+                <div class="item-meta">
+                    <span>🐟 Seafood</span>
+                    <span>🕒 18 min</span>
+                </div>
+            </div>
+
+            <!-- Desserts -->
+            <div class="menu-item category-desserts hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Saffron Phirni</div>
+                    <div class="item-price">₹480</div>
+                </div>
+                <p class="item-desc">Silky ground rice pudding, Kashmiri saffron, pistachios, rose petals.</p>
+                <div class="item-meta">
+                    <span>🌿 Veg</span>
+                    <span>🕒 5 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-desserts hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Gulab Jamun Cheese Cake</div>
+                    <div class="item-price">₹620</div>
+                </div>
+                <p class="item-desc">Fusion dessert: classic cheesecake infused with rose syrup & cardamom crumbs.</p>
+                <div class="item-meta">
+                    <span>🌟 Popular</span>
+                    <span>🕒 5 min</span>
+                </div>
+            </div>
+
+            <!-- Drinks -->
+            <div class="menu-item category-drinks hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Royal Kashmiri Kahwa</div>
+                    <div class="item-price">₹350</div>
+                </div>
+                <p class="item-desc">Traditional green tea, saffron, almonds, cinnamon, served in copper cup.</p>
+                <div class="item-meta">
+                    <span>🍵 Hot</span>
+                    <span>🕒 3 min</span>
+                </div>
+            </div>
+            <div class="menu-item category-drinks hidden fade-in">
+                <div class="item-header">
+                    <div class="item-name">Mango Lassi Royale</div>
+                    <div class="item-price">₹280</div>
+                </div>
+                <p class="item-desc">Fresh Alphonso mango blend, thick yogurt, cardamom, served chilled.</p>
+                <div class="item-meta">
+                    <span>🥭 Refreshing</span>
+                    <span>🕒 4 min</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section (NEW) -->
+    <section class="testimonials animate-on-scroll">
+        <div class="section-header">
+            <span class="section-tag">Guest Experiences</span>
+            <h2 class="section-title">What Our Guests Say</h2>
+        </div>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p class="testimonial-text">"An unforgettable evening! The Galouti Kebab melted in my mouth, and the ambiance transported me to royal India. Will definitely return."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">PS</div>
+                    <div class="author-info">
+                        <h5>Priya Sharma</h5>
+                        <p>Food Critic, Delhi Times</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"Celebrated our anniversary here. The private dining suite, personalized menu, and impeccable service made it truly magical. Thank you, NOOR!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">RK</div>
+                    <div class="author-info">
+                        <h5>Rahul & Kavita</h5>
+                        <p>Anniversary Celebration</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <p class="testimonial-text">"As a vegetarian, I'm often limited, but NOOR's creative plant-based dishes were extraordinary. The Dal Bukhara is a masterpiece!"</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">AM</div>
+                    <div class="author-info">
+                        <h5>Ananya Mehta</h5>
+                        <p>Wellness Blogger</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-nav">
+            <div class="testimonial-dot active" data-index="0"></div>
+            <div class="testimonial-dot" data-index="1"></div>
+            <div class="testimonial-dot" data-index="2"></div>
+        </div>
+    </section>
+
+    <!-- Gallery Section (NEW) -->
+    <section id="gallery" class="animate-on-scroll">
+        <div class="section-header">
+            <span class="section-tag">Visual Journey</span>
+            <h2 class="section-title">Our Ambiance & Cuisine</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <div class="gallery-overlay">
+                    <h4>Signature Plating</h4>
+                    <p>Artistry on every plate</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-overlay">
+                    <h4>Luxury Dining</h4>
+                    <p>Elegant private suites</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-overlay">
+                    <h4>Live Kitchen</h4>
+                    <p>Chefs in action</p>
+                </div>
+            </div>
+            <div class="gallery-item">
+                <div class="gallery-overlay">
+                    <h4>Wine Cellar</h4>
+                    <p>Premium selections</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation Section -->
+    <section class="reservation" id="reservation">
+        <div class="section-header">
+            <span class="section-tag">Book Your Experience</span>
+            <h2 class="section-title">Reserve a Table</h2>
+        </div>
+        <div class="form-box">
+            <form onsubmit="handleBooking(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" required placeholder="Amit Sharma">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone *</label>
+                        <input type="tel" id="phone" required placeholder="+91 98765 43210">
+                    </div>
+                    <div class="form-group">
+                        <label for="datetime">Date & Time *</label>
+                        <input type="datetime-local" id="datetime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="guests">Guests *</label>
+                        <select id="guests" required>
+                            <option value="1">1 Person</option>
+                            <option value="2" selected>2 People</option>
+                            <option value="3">3 People</option>
+                            <option value="4">4+ People</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="requests">Special Requests</label>
+                    <textarea id="requests" rows="3" placeholder="Dietary needs, occasion, seating preference..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Reservation ✨</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-logo">NOOR</span>
+        <div class="socials">
+            <a href="#" aria-label="Instagram">📷 Instagram</a>
+            <a href="#" aria-label="Facebook">📘 Facebook</a>
+            <a href="#" aria-label="WhatsApp">💬 WhatsApp</a>
+        </div>
+        <div class="contact-info">
+            <span>📍 42, Heritage Lane, New Delhi, 110001</span>
+            <span>📞 +91 11 4050 6789</span>
+            <span>✉️ reserve@noor-dining.com</span>
+        </div>
+        <p>Open Daily: 12:00 PM - 11:30 PM | Happy Hours: 5 PM - 8 PM</p>
+        <p class="copyright">© 2026 NOOR Restaurant. All rights reserved. | Crafted with ❤️ for culinary excellence</p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+    <script>
+        // ========== PRELOADER ==========
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 800);
+        });
+
+        // ========== NAVIGATION ==========
+        const navbar = document.getElementById('navbar');
+        const mobileBtn = document.getElementById('mobileBtn');
+        const navLinks = document.getElementById('navLinks');
+        
+        // Scroll effect
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+            
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            backToTop.classList.toggle('visible', window.scrollY > 500);
+            
+            // Active nav link on scroll
+            updateActiveNavLink();
+        });
+        
+        // Mobile menu toggle
+        mobileBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileBtn.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        // Smooth scroll with offset for fixed header
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Update active nav link based on scroll position
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('section[id]');
+            const scrollY = window.pageYOffset;
+            
+            sections.forEach(section => {
+                const sectionHeight = section.offsetHeight;
+                const sectionTop = section.offsetTop - 100;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+                    document.querySelectorAll('.nav-links a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // ========== MENU TABS ==========
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const menuItems = document.querySelectorAll('.menu-item');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active tab
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Filter menu items
+                const category = btn.dataset.category;
+                menuItems.forEach(item => {
+                    item.classList.add('hidden');
+                    item.classList.remove('fade-in');
+                });
+                
+                // Show items with staggered animation
+                const visibleItems = document.querySelectorAll(`.category-${category}`);
+                visibleItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.remove('hidden');
+                        void item.offsetWidth; // Trigger reflow
+                        item.classList.add('fade-in');
+                    }, index * 100); // Stagger effect
+                });
+            });
+        });
+
+        // ========== STATS COUNTER ANIMATION ==========
+        const statNumbers = document.querySelectorAll('.stat-number');
+        let statsAnimated = false;
+        
+        function animateStats() {
+            if (statsAnimated) return;
+            
+            const section = document.querySelector('.stats');
+            const sectionTop = section.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
+            
+            if (sectionTop < windowHeight * 0.85) {
+                statsAnimated = true;
+                statNumbers.forEach(stat => {
+                    const target = parseInt(stat.dataset.target);
+                    let count = 0;
+                    const increment = Math.ceil(target / 30);
+                    const timer = setInterval(() => {
+                        count += increment;
+                        if (count >= target) {
+                            stat.textContent = target + (target > 20 ? 'K+' : '+');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = count + (target > 20 ? 'K+' : '+');
+                        }
+                    }, 50);
+                });
+            }
+        }
+        
+        window.addEventListener('scroll', animateStats);
+        // Initial check
+        setTimeout(animateStats, 1000);
+
+        // ========== SCROLL ANIMATIONS (Intersection Observer) ==========
+        const animateOnScroll = document.querySelectorAll('.animate-on-scroll');
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        animateOnScroll.forEach(el => observer.observe(el));
+
+        // ========== TESTIMONIAL NAVIGATION ==========
+        const testimonialDots = document.querySelectorAll('.testimonial-dot');
+        testimonialDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                testimonialDots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+                // In a real implementation, this would change the visible testimonial
+            });
+        });
+
+        // ========== FORM HANDLING ==========
+        function handleBooking(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('.submit-btn');
+            const originalText = btn.innerHTML;
+            
+            // Loading state
+            btn.disabled = true;
+            btn.innerHTML = 'Reserving... ✨';
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert('🎉 Thank you! Your table at NOOR has been reserved. We will send a confirmation SMS shortly.');
+                e.target.reset();
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }, 1500);
+        }
+
+        // ========== BACK TO TOP ==========
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ========== INITIALIZE ==========
+        // Set min date for reservation to today
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().slice(0, 16);
+            document.getElementById('datetime').min = today;
+            
+            // Trigger initial animation for hero content
+            setTimeout(() => {
+                document.querySelector('.hero-content').style.animation = 'fadeUp 1s ease forwards';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
