@@ -181,13 +181,6 @@
             animation: float 20s ease-in-out infinite;
             z-index: 0;
         }
-        .hero::after {
-            content: ''; position: absolute; width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.04) 0%, transparent 70%);
-            bottom: -5%; left: -10%; border-radius: 50%;
-            animation: float 25s ease-in-out infinite reverse;
-            z-index: 0;
-        }
         @keyframes float {
             0%, 100% { transform: translateY(0) scale(1); }
             50% { transform: translateY(-20px) scale(1.02); }
@@ -211,7 +204,6 @@
             background: linear-gradient(135deg, #fff 25%, var(--gold) 90%); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
         }
         .hero p { 
             font-size: 1.15rem; color: var(--text-muted); 
@@ -255,7 +247,6 @@
         .btn-outline:hover { 
             background: var(--text); color: var(--bg); 
             transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(242, 242, 242, 0.2);
         }
 
         /* ========== SECTIONS ========== */
@@ -309,11 +300,6 @@
         .feature-icon {
             color: var(--gold); font-weight: bold; 
             font-size: 1.2rem; min-width: 24px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.1); }
         }
         .about-card {
             background: var(--surface-elevated); 
@@ -330,11 +316,7 @@
         }
         .about-card-icon { 
             font-size: 4.5rem; margin-bottom: 1.5rem; 
-            display: block; animation: bounce 3s infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            display: block;
         }
         .about-card h4 { 
             font-family: 'Playfair Display', serif; 
@@ -413,7 +395,6 @@
             border: 1px solid var(--border); 
             transition: var(--transition); 
             overflow: hidden;
-            position: relative;
         }
         .menu-item:hover { 
             transform: translateY(-8px); 
@@ -461,36 +442,156 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ========== LIGHTBOX ========== */
+        /* ========== MASONRY GALLERY (NEW) ========== */
+        .gallery {
+            max-width: 100%;
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 280px;
+            gap: 1.2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 2px solid var(--border);
+            transition: var(--transition);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(212, 175, 55, 0.25);
+            border-color: var(--gold);
+        }
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+        }
+        /* Masonry effect */
+        .card.tall { grid-row: span 2; }
+        .card.wide { grid-column: span 2; }
+        /* Hover insane effect */
+        .card:hover img {
+            transform: scale(1.15);
+            filter: brightness(0.5) contrast(1.1);
+        }
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card:hover .overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .overlay h3 {
+            font-size: 1.6rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 0.4rem;
+            color: var(--gold-light);
+        }
+        .overlay p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+        }
+        /* Gold accent line */
+        .overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            width: 50px;
+            height: 2px;
+            background: var(--gold-gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card:hover .overlay::before {
+            opacity: 1;
+        }
+
+        /* ========== LIGHTBOX (ENHANCED) ========== */
         #lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0,0,0,0.98);
             display: none;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             z-index: 9999;
             padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        #lightbox.active { display: flex; }
+        #lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
         #lightbox-img {
             max-width: 90%;
             max-height: 90%;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border-radius: 12px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.8);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        #lightbox.active #lightbox-img {
+            transform: scale(1);
         }
         #lightbox-close {
             position: absolute;
-            top: 20px;
+            top: 30px;
             right: 40px;
             font-size: 3rem;
             color: var(--gold);
             cursor: pointer;
             background: none;
             border: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
             transition: var(--transition-fast);
+            z-index: 10;
         }
-        #lightbox-close:hover { transform: rotate(90deg); color: var(--gold-light); }
+        #lightbox-close:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: rotate(90deg);
+            color: var(--gold-light);
+        }
+        #lightbox-caption {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #lightbox.active #lightbox-caption {
+            opacity: 1;
+        }
 
         /* ========== TESTIMONIALS ========== */
         .testimonials {
@@ -530,68 +631,6 @@
         }
         .author-info h5 { font-weight: 600; margin-bottom: 0.2rem; }
         .author-info p { color: var(--text-muted); font-size: 0.9rem; }
-
-        /* ========== GALLERY ========== */
-        .gallery {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 100%);
-        }
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem; margin-top: 2.5rem;
-        }
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 4/3;
-            border-radius: var(--radius);
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid var(--border);
-            transition: var(--transition);
-        }
-        .gallery-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--gold);
-            box-shadow: var(--shadow-hover);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-        .gallery-item:hover img {
-            transform: scale(1.1);
-            filter: brightness(0.7);
-        }
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1.8rem;
-            opacity: 0;
-            transition: var(--transition);
-        }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-overlay h4 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            margin-bottom: 0.4rem;
-            color: var(--gold);
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-        .gallery-item:hover .gallery-overlay h4 { transform: translateY(0); }
-        .gallery-overlay p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            transform: translateY(20px);
-            transition: var(--transition);
-            transition-delay: 0.1s;
-        }
-        .gallery-item:hover .gallery-overlay p { transform: translateY(0); }
 
         /* ========== RESERVATION ========== */
         .reservation { 
@@ -751,6 +790,12 @@
             .features { grid-template-columns: 1fr; }
             .stats { grid-template-columns: repeat(2, 1fr); }
             .form-grid { grid-template-columns: 1fr; }
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-auto-rows: 240px;
+            }
+            .card.wide { grid-column: span 1; }
+            .card.tall { grid-row: span 1; }
         }
         @media (max-width: 768px) {
             .mobile-btn { display: block; }
@@ -769,14 +814,16 @@
             section { padding: 4.5rem 5%; }
             .stats { grid-template-columns: 1fr 1fr; }
             .menu-grid { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-            #lightbox-close { top: 10px; right: 20px; font-size: 2.5rem; }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: 280px;
+            }
+            #lightbox-close { top: 15px; right: 20px; font-size: 2.5rem; }
         }
         @media (max-width: 480px) {
             .hero-buttons { flex-direction: column; align-items: center; }
             .btn { width: 100%; max-width: 300px; }
             .stats { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: 1fr; }
         }
 
         /* ========== ANIMATIONS ========== */
@@ -811,8 +858,9 @@
 
     <!-- LIGHTBOX -->
     <div id="lightbox">
-        <button id="lightbox-close">&times;</button>
-        <img id="lightbox-img" src="" alt="Full size">
+        <button id="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img id="lightbox-img" src="" alt="Full view">
+        <div id="lightbox-caption"></div>
     </div>
 
     <!-- NAVIGATION -->
@@ -839,7 +887,7 @@
         <div class="hero-content">
             <span class="tagline">✦ Est. 2018 • New Delhi ✦</span>
             <h1>Luxury Dining Experience</h1>
-            <p>Experience the finest Indian culinary artistry, crafted with premium organic ingredients and served in a luxurious ambiance designed for unforgettable moments.</p>
+            <p>Experience the finest Indian culinary artistry, crafted with premium organic ingredients and served in a luxurious ambiance.</p>
             <div class="hero-buttons">
                 <a href="#menu" class="btn btn-primary">Explore Menu</a>
                 <a href="#reservation" class="btn btn-outline">Book a Table</a>
@@ -853,8 +901,7 @@
             <div class="about-text">
                 <span class="section-tag">Our Philosophy</span>
                 <h3>Crafting Memories, One Plate at a Time</h3>
-                <p>At NOOR, we believe dining is an art form. Our kitchen blends ancient spice traditions with modern culinary techniques, sourcing hand-picked ingredients from local organic farms.</p>
-                <p>Every dish is meticulously prepared by our award-winning chefs to deliver a symphony of flavors.</p>
+                <p>At NOOR, we believe dining is an art form. Our kitchen blends ancient spice traditions with modern culinary techniques.</p>
                 <div class="features">
                     <div class="feature"><span class="feature-icon">✦</span> 100% Organic Ingredients</div>
                     <div class="feature"><span class="feature-icon">✦</span> Award-Winning Chefs</div>
@@ -895,13 +942,10 @@
         <div class="section-header">
             <span class="section-tag">Curated Selections</span>
             <h2 class="section-title">Our Menu</h2>
-            <p class="subtitle">Explore our carefully crafted dishes</p>
         </div>
 
-        <!-- SEARCH -->
         <input type="text" class="menu-search" id="menuSearch" placeholder="Search dishes...">
 
-        <!-- TABS -->
         <div class="menu-tabs">
             <button class="tab-btn active" data-category="starters">Starters</button>
             <button class="tab-btn" data-category="mains">Main Course</button>
@@ -909,153 +953,129 @@
             <button class="tab-btn" data-category="drinks">Drinks</button>
         </div>
 
-        <!-- MENU GRID -->
         <div class="menu-grid" id="menuContainer">
-            <!-- Starters -->
             <div class="menu-item category-starters fade-in">
-                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&q=80" alt="Kebab" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=600&q=80" alt="Kebab" onclick="openLightbox(this.src, 'Galouti Kebab')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Galouti Kebab</div>
                         <div class="item-price">₹850</div>
                     </div>
-                    <p class="item-desc">Melt-in-mouth minced lamb, infused with 24 spices, served on saffron paratha.</p>
-                    <div class="item-meta">
-                        <span>🔥 Chef's Choice</span>
-                        <span>🕒 15 min</span>
-                    </div>
+                    <p class="item-desc">Melt-in-mouth minced lamb, infused with 24 spices.</p>
+                    <div class="item-meta"><span>🔥 Chef's Choice</span><span>🕒 15 min</span></div>
                 </div>
             </div>
             <div class="menu-item category-starters fade-in">
-                <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Paneer Tikka" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=80" alt="Paneer" onclick="openLightbox(this.src, 'Paneer Tikka Royal')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Paneer Tikka Royal</div>
                         <div class="item-price">₹720</div>
                     </div>
-                    <p class="item-desc">Cottage cheese marinated in hung curd & roasted bell peppers, smoked with cloves.</p>
-                    <div class="item-meta">
-                        <span>🌿 Vegetarian</span>
-                        <span>🕒 12 min</span>
-                    </div>
+                    <p class="item-desc">Cottage cheese marinated in hung curd & roasted peppers.</p>
+                    <div class="item-meta"><span>🌿 Vegetarian</span><span>🕒 12 min</span></div>
                 </div>
             </div>
-            <div class="menu-item category-starters fade-in">
-                <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&q=80" alt="Prawn" onclick="openLightbox(this.src)">
-                <div class="menu-content">
-                    <div class="item-header">
-                        <div class="item-name">Jumbo Prawn Calamari</div>
-                        <div class="item-price">₹1,100</div>
-                    </div>
-                    <p class="item-desc">Crispy fried tiger prawns, served with mint-yogurt dip & lemon wedge.</p>
-                    <div class="item-meta">
-                        <span>🦐 Seafood</span>
-                        <span>🕒 10 min</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mains -->
             <div class="menu-item category-mains hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80" alt="Butter Chicken" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=600&q=80" alt="Butter Chicken" onclick="openLightbox(this.src, 'Butter Chicken Noir')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Butter Chicken Noir</div>
                         <div class="item-price">₹1,250</div>
                     </div>
-                    <p class="item-desc">Tandoor-roasted chicken, silky tomato-cashew gravy, finished with cream & fenugreek.</p>
-                    <div class="item-meta">
-                        <span>🌟 Signature</span>
-                        <span>🕒 20 min</span>
-                    </div>
+                    <p class="item-desc">Tandoor-roasted chicken, silky tomato-cashew gravy.</p>
+                    <div class="item-meta"><span>🌟 Signature</span><span>🕒 20 min</span></div>
                 </div>
             </div>
             <div class="menu-item category-mains hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1585937421612-70e008356f67?w=600&q=80" alt="Biryani" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1585937421612-70e008356f67?w=600&q=80" alt="Biryani" onclick="openLightbox(this.src, 'Royal Biryani')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Royal Biryani</div>
                         <div class="item-price">₹950</div>
                     </div>
-                    <p class="item-desc">Aromatic basmati rice, slow-cooked meat, saffron, and traditional spices.</p>
-                    <div class="item-meta">
-                        <span>🔥 Popular</span>
-                        <span>🕒 25 min</span>
-                    </div>
+                    <p class="item-desc">Aromatic basmati rice, slow-cooked meat, saffron.</p>
+                    <div class="item-meta"><span>🔥 Popular</span><span>🕒 25 min</span></div>
                 </div>
             </div>
-            <div class="menu-item category-mains hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1546833998-877b37c2e5c6?w=600&q=80" alt="Dal" onclick="openLightbox(this.src)">
-                <div class="menu-content">
-                    <div class="item-header">
-                        <div class="item-name">Dal Bukhara</div>
-                        <div class="item-price">₹950</div>
-                    </div>
-                    <p class="item-desc">Black lentils simmered overnight with butter, garlic, and smoked charcoal.</p>
-                    <div class="item-meta">
-                        <span>🌿 Vegetarian</span>
-                        <span>🕒 10 min</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Desserts -->
             <div class="menu-item category-desserts hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1549396535-c11d5c55b9df?w=600&q=80" alt="Dessert" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1549396535-c11d5c55b9df?w=600&q=80" alt="Phirni" onclick="openLightbox(this.src, 'Saffron Phirni')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Saffron Phirni</div>
                         <div class="item-price">₹480</div>
                     </div>
-                    <p class="item-desc">Silky ground rice pudding, Kashmiri saffron, pistachios, rose petals.</p>
-                    <div class="item-meta">
-                        <span>🌿 Veg</span>
-                        <span>🕒 5 min</span>
-                    </div>
+                    <p class="item-desc">Silky ground rice pudding, Kashmiri saffron, pistachios.</p>
+                    <div class="item-meta"><span>🌿 Veg</span><span>🕒 5 min</span></div>
                 </div>
             </div>
-            <div class="menu-item category-desserts hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80" alt="Cheesecake" onclick="openLightbox(this.src)">
-                <div class="menu-content">
-                    <div class="item-header">
-                        <div class="item-name">Gulab Jamun Cheesecake</div>
-                        <div class="item-price">₹620</div>
-                    </div>
-                    <p class="item-desc">Fusion dessert: classic cheesecake infused with rose syrup & cardamom.</p>
-                    <div class="item-meta">
-                        <span>🌟 Popular</span>
-                        <span>🕒 5 min</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Drinks -->
             <div class="menu-item category-drinks hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Tea" onclick="openLightbox(this.src)">
+                <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&q=80" alt="Kahwa" onclick="openLightbox(this.src, 'Royal Kashmiri Kahwa')">
                 <div class="menu-content">
                     <div class="item-header">
                         <div class="item-name">Royal Kashmiri Kahwa</div>
                         <div class="item-price">₹350</div>
                     </div>
-                    <p class="item-desc">Traditional green tea, saffron, almonds, cinnamon, served in copper cup.</p>
-                    <div class="item-meta">
-                        <span>🍵 Hot</span>
-                        <span>🕒 3 min</span>
-                    </div>
+                    <p class="item-desc">Traditional green tea, saffron, almonds, cinnamon.</p>
+                    <div class="item-meta"><span>🍵 Hot</span><span>🕒 3 min</span></div>
                 </div>
             </div>
-            <div class="menu-item category-drinks hidden fade-in">
-                <img src="https://images.unsplash.com/photo-1546171753-97dcd08c26a1?w=600&q=80" alt="Lassi" onclick="openLightbox(this.src)">
-                <div class="menu-content">
-                    <div class="item-header">
-                        <div class="item-name">Mango Lassi Royale</div>
-                        <div class="item-price">₹280</div>
-                    </div>
-                    <p class="item-desc">Fresh Alphonso mango blend, thick yogurt, cardamom, served chilled.</p>
-                    <div class="item-meta">
-                        <span>🥭 Refreshing</span>
-                        <span>🕒 4 min</span>
-                    </div>
+        </div>
+    </section>
+
+    <!-- MASONRY GALLERY SECTION -->
+    <section class="gallery" id="gallery">
+        <div class="section-header">
+            <span class="section-tag">Visual Journey</span>
+            <h2 class="section-title">Our Experience</h2>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="card" onclick="openLightbox(this.querySelector('img').src, 'Luxury Interior')">
+                <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80" alt="Luxury Interior">
+                <div class="overlay">
+                    <h3>Luxury Interior</h3>
+                    <p>Elegant fine dining ambiance</p>
+                </div>
+            </div>
+
+            <div class="card tall" onclick="openLightbox(this.querySelector('img').src, 'Signature Plating')">
+                <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=800&q=80" alt="Signature Plating">
+                <div class="overlay">
+                    <h3>Signature Plating</h3>
+                    <p>Artistry on every plate</p>
+                </div>
+            </div>
+
+            <div class="card wide" onclick="openLightbox(this.querySelector('img').src, 'Fine Dining Space')">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&q=80" alt="Fine Dining Space">
+                <div class="overlay">
+                    <h3>Fine Dining Space</h3>
+                    <p>Dark & elegant vibe</p>
+                </div>
+            </div>
+
+            <div class="card" onclick="openLightbox(this.querySelector('img').src, 'Gourmet Dishes')">
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Gourmet Dishes">
+                <div class="overlay">
+                    <h3>Gourmet Dishes</h3>
+                    <p>Premium curated menu</p>
+                </div>
+            </div>
+
+            <div class="card wide" onclick="openLightbox(this.querySelector('img').src, 'Cozy Atmosphere')">
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80" alt="Cozy Atmosphere">
+                <div class="overlay">
+                    <h3>Cozy Atmosphere</h3>
+                    <p>Warm & relaxing interiors</p>
+                </div>
+            </div>
+
+            <div class="card tall" onclick="openLightbox(this.querySelector('img').src, 'Premium Drinks')">
+                <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800&q=80" alt="Premium Drinks">
+                <div class="overlay">
+                    <h3>Premium Drinks</h3>
+                    <p>Crafted cocktails & beverages</p>
                 </div>
             </div>
         </div>
@@ -1096,44 +1116,6 @@
                         <h5>Ananya Mehta</h5>
                         <p>Wellness Blogger</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- GALLERY -->
-    <section id="gallery" class="gallery animate-on-scroll">
-        <div class="section-header">
-            <span class="section-tag">Visual Journey</span>
-            <h2 class="section-title">Our Ambiance & Cuisine</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80" alt="Interior" onclick="openLightbox(this.src)">
-                <div class="gallery-overlay">
-                    <h4>Luxury Dining Room</h4>
-                    <p>Elegant ambiance</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1631515243349-e06020b5c36b?w=800&q=80" alt="Food" onclick="openLightbox(this.src)">
-                <div class="gallery-overlay">
-                    <h4>Signature Plating</h4>
-                    <p>Artistry on every plate</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1559339352-11b06f61244c?w=800&q=80" alt="Ambiance" onclick="openLightbox(this.src)">
-                <div class="gallery-overlay">
-                    <h4>Intimate Atmosphere</h4>
-                    <p>Dark, moody spaces</p>
-                </div>
-            </div>
-            <div class="gallery-item">
-                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80" alt="Cuisine" onclick="openLightbox(this.src)">
-                <div class="gallery-overlay">
-                    <h4>Gourmet Cuisine</h4>
-                    <p>Exquisite flavors</p>
                 </div>
             </div>
         </div>
@@ -1214,12 +1196,8 @@
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             document.getElementById('progressBar').style.width = (scroll / height) * 100 + '%';
             
-            // Navbar scroll effect
             document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-            
-            // Back to top button
             document.getElementById('topBtn').classList.toggle('visible', window.scrollY > 300);
-            
             updateActiveNavLink();
         });
 
@@ -1231,7 +1209,6 @@
             localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
         }
 
-        // Load saved theme
         if (localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
             document.querySelector('.theme-toggle').textContent = '☀️';
@@ -1274,31 +1251,30 @@
         // ========== LIGHTBOX ==========
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxCaption = document.getElementById('lightbox-caption');
 
-        function openLightbox(src) {
+        function openLightbox(src, caption = '') {
             lightboxImg.src = src;
+            lightboxCaption.textContent = caption;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        lightboxClose.addEventListener('click', () => {
+        function closeLightbox() {
             lightbox.classList.remove('active');
             document.body.style.overflow = '';
-        });
+            setTimeout(() => {
+                lightboxImg.src = '';
+            }, 300);
+        }
 
         lightbox.addEventListener('click', (e) => {
-            if (e.target === lightbox) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
+            if (e.target === lightbox) closeLightbox();
         });
 
-        // Close on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
+                closeLightbox();
             }
         });
 
@@ -1407,7 +1383,6 @@
             }, 1500);
         }
 
-        // Set min date for reservation
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date().toISOString().slice(0, 16);
             const dateInput = document.querySelector('input[type="datetime-local"]');
